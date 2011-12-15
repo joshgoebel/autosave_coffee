@@ -36,10 +36,10 @@
       $(this.input).bind("keyup", __bind(function() {
         return this.save();
       }, this));
-      $(this.input).parents("form").find("input:submit").click(__bind(function() {
+      $(this.input).closest("form").find("input:submit").click(__bind(function() {
         return this.clear();
       }, this));
-      return $(this.input).parents("form").find("[data-behavior~=clear]").click(__bind(function() {
+      return $(this.input).closest("form").find("[data-behavior~=clear]").click(__bind(function() {
         return this.clear();
       }, this));
     };

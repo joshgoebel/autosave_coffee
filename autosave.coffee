@@ -35,10 +35,10 @@ class @AutoSave
     $(@input).bind "paste", => @save()
     $(@input).bind "keyup", => @save()
     # clear on submit
-    $(@input).parents("form").find("input:submit").click =>      
+    $(@input).closest("form").find("input:submit").click =>      
       @clear()
     # clear if a cancel link or similar with behavior=clear is clicked
-    $(@input).parents("form").find("[data-behavior~=clear]").click =>
+    $(@input).closest("form").find("[data-behavior~=clear]").click =>
       @clear()
   
   # generate a unique key for every input field you wish autosave to work 
