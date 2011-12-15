@@ -9,8 +9,7 @@ $(document).ready ->
 # quick class to define globals we'll use later to generate unique
 # hash keys to store the autosave values
 class Meta
-  cu = $("meta[name=current_user]")[0]
-  @current_user = if cu then cu.content else null
+  @current_user = $("meta[name=current_user]").attr("content")
 
 # The @ makes sure this class is global and escapes the CoffeeScript wrapper
 class @AutoSave

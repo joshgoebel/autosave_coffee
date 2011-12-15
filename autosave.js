@@ -6,10 +6,8 @@
     return AutoSave.enable(document.body);
   });
   Meta = (function() {
-    var cu;
     function Meta() {}
-    cu = $("meta[name=current_user]")[0];
-    Meta.current_user = cu ? cu.content : null;
+    Meta.current_user = $("meta[name=current_user]").attr("content");
     return Meta;
   })();
   this.AutoSave = (function() {
