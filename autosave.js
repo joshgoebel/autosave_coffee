@@ -42,7 +42,7 @@
       }, this));
     };
     AutoSave.prototype.generateHashKey = function() {
-      return "autosave:" + [Meta.current_user, this.input.name, $(this.input).parents("form")[0].action, escape(window.location.pathname)].join(";;");
+      return "autosave:" + [Meta.current_user, this.input.name, $(this.input).closest("form").attr("action"), escape(window.location.pathname)].join(";;");
     };
     AutoSave.prototype.save = function() {
       return DS.setItem(this.storageKey, this.input.value);

@@ -45,7 +45,7 @@ class @AutoSave
     "autosave:" + [
       Meta.current_user,
       @input.name,
-      $(@input).parents("form")[0].action,
+      $(@input).closest("form").attr("action"),
       escape(window.location.pathname)].join(";;")
   
   save: ->
