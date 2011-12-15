@@ -24,11 +24,11 @@
     };
     function AutoSave(input) {
       this.input = input;
-      this.setup();
-      this.restore();
-    }
-    AutoSave.prototype.setup = function() {
       this.storageKey = this.generateHashKey();
+      this.restore();
+      this.setupBindings();
+    }
+    AutoSave.prototype.setupBindings = function() {
       $(this.input).change(__bind(function() {
         return this.save();
       }, this));
@@ -56,8 +56,8 @@
     };
     AutoSave.prototype.restore = function() {
       var old;
-      if ((old = DS.getItem(this.storageKey))) {
-        if (!this.input.value) {
+      if (!this.input.value) {
+        if ((old = DS.getItem(this.storageKey))) {
           return this.input.value = old;
         }
       }

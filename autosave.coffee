@@ -26,11 +26,11 @@ class @AutoSave
         new AutoSave(this)
       
   constructor: (@input) ->
-    @setup()
-    @restore()    
-    
-  setup: ->
     @storageKey = @generateHashKey()    
+    @restore()    
+    @setupBindings()
+    
+  setupBindings: ->
     # detect changes
     $(@input).change => @save()
     $(@input).bind "paste", => @save()
@@ -59,6 +59,6 @@ class @AutoSave
     DS.removeItem @storageKey
     
   restore: ->
-    if (old = DS.getItem @storageKey)
-      unless @input.value
+    unless @input.value
+      if (old = DS.getItem @storageKey)  
         @input.value = old
