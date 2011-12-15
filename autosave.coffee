@@ -8,9 +8,6 @@ $(document).ready ->
 
 # quick class to define globals we'll use later to generate unique
 # hash keys to store the autosave values
-
-# You could also remove this function entirely and inline it into the AutoSave
-# class if you wanted, but I liked the idea of breaking it out.
 class Meta
   cu = $("meta[name=current_user]")[0]
   @current_user = if cu then cu.content else null

@@ -60,7 +60,11 @@ This would prevent two users on the same computer from ever seeing each
 others auto-complete text, even if they were working on the same pages and
 objects in your app.
 
-Then to retrieve that our Meta class would look like this:
+#### Wrapping this is a quick class
+
+I define a default Meta class that looks like this.  This is entirely optional
+and if you don't like it feel free to yank it and inline that code inside
+the AutoSave class itself.
 
     class Meta
       cu = $("meta[name=current_user]")[0]
