@@ -1,0 +1,6 @@
+1. ("input:submit").click => @clear()
+
+This is probably the wrong thing for any form with JS validations... you click
+submit but you hit a JS validation error, yet your autosave has just been 
+cleared.  Capturing form#onsubmit isn't better since it doesn't capture AJAX 
+form submissions.
