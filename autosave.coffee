@@ -1,15 +1,15 @@
 # because $ is prototype in most of my apps, but I love jQuery now - this
 # lets me use $ inside the Coffee wrapper without even thinking about Prototype
-$=jQuery
+$ = jQuery
 
 # enable any autosave fields on the entire page after it's loaded
 $(document).ready ->
-  AutoSave.enable(document.body)
+  AutoSave.enable document.body
 
 # quick class to define globals we'll use later to generate unique
 # hash keys to store the autosave values
 class Meta
-  @current_user = $("meta[name=current_user]").attr("content")
+  @current_user = $("meta[name=current_user]").attr "content"
 
 # The @ makes sure this class is global and escapes the CoffeeScript wrapper
 class @AutoSave
@@ -20,7 +20,7 @@ class @AutoSave
   # properties and autosave enabled... you would want to use this after
   # adding content to a page with AJAX such as:
   @enable: (root) ->
-    if DS and not navigator.userAgent.match("MSIE [78]")
+    if DS and not navigator.userAgent.match "MSIE [78]"
       $(root).find("[data-behavior~=autosave]").each ->
         new AutoSave(this)
       
@@ -31,15 +31,12 @@ class @AutoSave
     
   setupBindings: ->
     # detect changes
-    $(@input).change => @save()
-    $(@input).bind "paste", => @save()
-    $(@input).bind "keyup", => @save()
-    # clear on submit
-    $(@input).closest("form").find("input:submit").click =>      
-      @clear()
-    # clear if a cancel link or similar with behavior=clear is clicked
-    $(@input).closest("form").find("[data-behavior~=clear]").click =>
-      @clear()
+    for ev of ["paste", "change", "keyup"]
+      $(@input).bind ev, => @save()
+    # clear on submit or if a clear behavior item is clicked
+    form = $(@input).closest "form"
+    form.find("input:submit").click => @clear()
+    form.find("[data-behavior~=clear]").click => @clear()
   
   # generate a unique key for every input field you wish autosave to work 
   # with - you should make sure this is unique so that you don't have the
@@ -59,5 +56,5 @@ class @AutoSave
     
   restore: ->
     unless @input.value
-      if (old = DS.getItem @storageKey)  
+      if (old = DS.getItem @storageKey)
         @input.value = old

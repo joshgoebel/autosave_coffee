@@ -27,19 +27,17 @@
       this.setupBindings();
     }
     AutoSave.prototype.setupBindings = function() {
-      $(this.input).change(__bind(function() {
-        return this.save();
-      }, this));
-      $(this.input).bind("paste", __bind(function() {
-        return this.save();
-      }, this));
-      $(this.input).bind("keyup", __bind(function() {
-        return this.save();
-      }, this));
-      $(this.input).closest("form").find("input:submit").click(__bind(function() {
+      var ev, form;
+      for (ev in ["paste", "change", "keyup"]) {
+        $(this.input).bind(ev, __bind(function() {
+          return this.save();
+        }, this));
+      }
+      form = $(this.input).closest("form");
+      form.find("input:submit").click(__bind(function() {
         return this.clear();
       }, this));
-      return $(this.input).closest("form").find("[data-behavior~=clear]").click(__bind(function() {
+      return form.find("[data-behavior~=clear]").click(__bind(function() {
         return this.clear();
       }, this));
     };
