@@ -4,12 +4,14 @@ $ = jQuery
 
 # enable any autosave fields on the entire page after it's loaded
 $(document).ready ->
+  Meta.parseHTML()
   AutoSave.enable document.body
 
-# quick class to define globals we'll use later to generate unique
-# hash keys to store the autosave values
 class Meta
-  @current_user = $("meta[name=current_user]").attr "content"
+  # @current_user = $("meta[name=current_user]").attr "content"
+  @parseHTML: ->
+    $("meta").each ->
+      Meta[this.name] = this.content
 
 # The @ makes sure this class is global and escapes the CoffeeScript wrapper
 class @AutoSave
@@ -25,13 +27,13 @@ class @AutoSave
         new AutoSave(this)
       
   constructor: (@input) ->
-    @storageKey = @generateHashKey()    
+    @generateHashKey()    
     @restore()    
     @setupBindings()
     
   setupBindings: ->
     # detect changes
-    for ev of ["paste", "change", "keyup"]
+    for ev in ["paste", "change", "keyup"]
       $(@input).bind ev, => @save()
     # clear on submit or if a clear behavior item is clicked
     form = $(@input).closest "form"
@@ -42,7 +44,7 @@ class @AutoSave
   # with - you should make sure this is unique so that you don't have the
   # wrong autosave data popping up randomly on other pages of your app
   generateHashKey: -> 
-    "autosave:" + [
+    @storageKey = "autosave:" + [
       Meta.current_user,
       @input.name,
       $(@input).closest("form").attr("action"),
@@ -56,5 +58,4 @@ class @AutoSave
     
   restore: ->
     unless @input.value
-      if (old = DS.getItem @storageKey)
-        @input.value = old
+      @input.value = DS.getItem(@storageKey) || ""

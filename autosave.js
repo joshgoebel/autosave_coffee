@@ -1,18 +1,32 @@
 (function() {
   var $, Meta;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   $ = jQuery;
+
   $(document).ready(function() {
+    Meta.parseHTML();
     return AutoSave.enable(document.body);
   });
+
   Meta = (function() {
+
     function Meta() {}
-    Meta.current_user = $("meta[name=current_user]").attr("content");
+
+    Meta.parseHTML = function() {
+      return $("meta").each(function() {
+        return Meta[this.name] = this.content;
+      });
+    };
+
     return Meta;
+
   })();
+
   this.AutoSave = (function() {
     var DS;
+
     DS = window.localStorage;
+
     AutoSave.enable = function(root) {
       if (DS && !navigator.userAgent.match("MSIE [78]")) {
         return $(root).find("[data-behavior~=autosave]").each(function() {
@@ -20,44 +34,53 @@
         });
       }
     };
+
     function AutoSave(input) {
       this.input = input;
-      this.storageKey = this.generateHashKey();
+      this.generateHashKey();
       this.restore();
       this.setupBindings();
     }
+
     AutoSave.prototype.setupBindings = function() {
-      var ev, form;
-      for (ev in ["paste", "change", "keyup"]) {
-        $(this.input).bind(ev, __bind(function() {
-          return this.save();
-        }, this));
+      var ev, form, _i, _len, _ref;
+      var _this = this;
+      _ref = ["paste", "change", "keyup"];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ev = _ref[_i];
+        $(this.input).bind(ev, function() {
+          return _this.save();
+        });
       }
       form = $(this.input).closest("form");
-      form.find("input:submit").click(__bind(function() {
-        return this.clear();
-      }, this));
-      return form.find("[data-behavior~=clear]").click(__bind(function() {
-        return this.clear();
-      }, this));
+      form.find("input:submit").click(function() {
+        return _this.clear();
+      });
+      return form.find("[data-behavior~=clear]").click(function() {
+        return _this.clear();
+      });
     };
+
     AutoSave.prototype.generateHashKey = function() {
-      return "autosave:" + [Meta.current_user, this.input.name, $(this.input).closest("form").attr("action"), escape(window.location.pathname)].join(";;");
+      return this.storageKey = "autosave:" + [Meta.current_user, this.input.name, $(this.input).closest("form").attr("action"), escape(window.location.pathname)].join(";;");
     };
+
     AutoSave.prototype.save = function() {
       return DS.setItem(this.storageKey, this.input.value);
     };
+
     AutoSave.prototype.clear = function() {
       return DS.removeItem(this.storageKey);
     };
+
     AutoSave.prototype.restore = function() {
-      var old;
       if (!this.input.value) {
-        if ((old = DS.getItem(this.storageKey))) {
-          return this.input.value = old;
-        }
+        return this.input.value = DS.getItem(this.storageKey) || "";
       }
     };
+
     return AutoSave;
+
   })();
+
 }).call(this);
